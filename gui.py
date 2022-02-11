@@ -44,7 +44,7 @@ def open_gui():
 
 def login_gui(window):
     def login_click():
-        message = login(firstname.get(), surname.get())
+        message = login(username.get())
         if not empty(message):
             messagebox.showerror('Input Error', message)
 
@@ -60,8 +60,7 @@ def login_gui(window):
     
     spacing(2, frame)
 
-    firstname = create_entry("Firstname", frame)
-    surname = create_entry("Surname", frame)
+    username = create_entry("Username", frame)
 
     spacing(2, frame)
     login_button = tk.Button(master=frame, text="Login", bg='#4B4B4C', fg='#fff', command=login_click, padx=20, pady=5) 
@@ -77,7 +76,7 @@ def signup_gui(window):
         login_gui(window)
 
     def signup_click():
-        message = signup(firstname.get(), surname.get(), email.get(), dob.get())
+        message = signup(username.get(),firstname.get(), surname.get(), email.get(), dob.get())
         if not empty(message):
             messagebox.showerror('Input Error', message)
         else:
@@ -92,10 +91,11 @@ def signup_gui(window):
 
     spacing(2, frame)
 
+    username = create_entry("Username", frame)
     firstname = create_entry("Firstname", frame)
     surname = create_entry("Surname", frame)
     email = create_entry("Email", frame)
-    dob = create_entry("", frame, 1)
+    dob = create_entry("Date of Birth", frame, 1)
 
 
     spacing(2, frame)
