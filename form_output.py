@@ -13,12 +13,11 @@ def login(username):
         """
         COLLECT SQL IMAGE
         """
-        #record = (username, )
-        #select_image = query("""SELECT ImageData, user.UserID FROM faces INNERJOIN user
-        #                        ON faces.UserID = user.UserID
-        #                        WHERE user.Username = %s,  record)   
+        record = (username, )
+        select_image = query("""SELECT ImageData, user.UserID FROM faces INNERJOIN user
+                                ON faces.UserID = user.UserID
+                                WHERE user.Username = %s""",  record)   
 
-        """
         user_id = select_image[0][0]
         image_data = convert_binary_data("person.png")
 
@@ -35,25 +34,22 @@ def login(username):
 
             remove_local_image("sqlimage.png")
             remove_local_image()
-        """
-
-        """
+       
         if(hit/(hit+miss) > 0.7):
             message = "same"
 
-            #record = (user_id, image_data)
-        """
-        #   query("""
-        #        INSERT INTO
-        #        faces (UserID, ImageData)
-        #        VALUES
-        #        (%s, %s);
-        #        """,
-        #        record)
-        """
+            record = (user_id, image_data)
+        
+            query("""
+                INSERT INTO
+                faces (UserID, ImageData)
+                VALUES (%s, %s);
+                """,
+                record)
+        
         else:
             message = "You are not " + username + "\nPlease check the details entered and try again"
-        """
+        
 
     return message
 
