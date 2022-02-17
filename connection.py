@@ -1,7 +1,7 @@
 import mysql.connector
 from mysql.connector import Error
 
-def create_connection(host_name="sql208.epizy.com", user_name="epiz_30592451", user_password="AWjibYsa2g", db_name="epiz_30592451_facial_recogntion"):
+def create_connection(host_name="localhost", user_name="root", user_password="", db_name="facial_recogntion"):
     connection = None
     try:
         connection = mysql.connector.connect(
@@ -19,7 +19,7 @@ def create_connection(host_name="sql208.epizy.com", user_name="epiz_30592451", u
 def execute_query(connection, query, record=""):
     cursor = connection.cursor(buffered=True)
     try:
-        if(record):
+        if(record == ""):
             cursor.execute(query)
         else:
             cursor.execute(query, record)
