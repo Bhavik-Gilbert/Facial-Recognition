@@ -6,7 +6,7 @@ import tkcalendar as calendar
 
 from functions import empty
 
-from form_output import login, signup, retake_image, confirm_image
+from form_output import login, signup, retake_image, confirm_image, cancel_images
 
 def create_entry(text:str, frame, type:int=0):
         label = tk.Label(frame, text=text, bg="#000", fg="#fff", font=('Silkscreen',14,'italic'))
@@ -76,12 +76,20 @@ def signup_gui(window):
         login_gui(window)
 
     def signup_click():
-        message = signup(username.get(),firstname.get(), surname.get(), email.get(), dob.get())
-        if not empty(message):
-            messagebox.showerror('Input Error', message)
-        else:
+        message, valid = signup(username.get(),firstname.get(), surname.get(), email.get(), dob.get())
+
+        global invalid
+        invalid = False
+
+        if not(empty(message)):
+            invalid = True
+
+        if valid:
             frame.destroy()
             image_gui(window)
+        
+        if not(empty(message)):
+            messagebox.showerror('Input Error', message)
 
     frame = create_frame(window, "Signup")
 
@@ -108,15 +116,37 @@ def signup_gui(window):
 
 def image_gui(window):
     def confirm_click():
-        confirm_image()
-        messagebox.showerror('Complete', "Signup Successful")
+        upload = confirm_image()
+        if(upload):
+            messagebox.showerror('Complete', "Signup Successful")
+            frame.destroy()
+            login_gui(window)
+        else:
+            messagebox.showerror('Error', "Couldn't upload image to database")
+
+    def retake_click():
+        message = retake_image()
+
+        global invalid
+        invalid = False
+
+        if not(empty(message)):
+            invalid = True
+
+        frame.destroy()
+        image_gui(window)
+
+        if not(empty(message)):
+            messagebox.showerror('Input Error', message)
+    
+    def cancel_click():
+        cancel_images()
+        
         frame.destroy()
         login_gui(window)
 
-    def retake_click():
-        retake_image()
-        frame.destroy()
-        image_gui(window)
+        messagebox.showerror('Cancel', "Signup Cancelled Successfully")
+        
 
     frame = create_frame(window, "Picture")
 
@@ -129,10 +159,17 @@ def image_gui(window):
 
     spacing(2, frame)
 
-    confirm_button = tk.Button(master=frame, text="Confirm", bg='#4B4B4C', fg='#fff', command=confirm_click, padx=20, pady=5)
-    confirm_button.pack()
-    spacing(1, frame)
+    if not(invalid):
+        confirm_button = tk.Button(master=frame, text="Confirm", bg='#4B4B4C', fg='#fff', command=confirm_click, padx=20, pady=5)
+        confirm_button.pack()
+        spacing(1, frame)
+
     retake_button = tk.Button(master=frame, text="Retake", bg='#2f374a', fg='#fff', command=retake_click, padx=20, pady=5) 
     retake_button.pack()
+
+    spacing(1, frame)
+    cancel_button = tk.Button(master=frame, text="Cancel", bg='#73081a', fg='#fff', command=cancel_click, padx=20, pady=5) 
+    cancel_button.pack()
+
     
 open_gui()
