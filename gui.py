@@ -43,7 +43,11 @@ def open_gui():
 
 def login_gui(window):
     def login_click():
-        message = login(username.get())
+        message, compare = login(username.get())
+        if(compare):
+            frame.destroy()
+            logged_in_gui(window)
+
         if not empty(message):
             messagebox.showerror('Input Error', message)
 
@@ -106,7 +110,6 @@ def signup_gui(window):
 
 
     spacing(2, frame)
-    message = ''
     signup_button = tk.Button(master=frame, text="Signup", bg='#4B4B4C', fg='#fff', command=signup_click, padx=20, pady=5)
     signup_button.pack()
     spacing(1, frame)
@@ -169,5 +172,27 @@ def image_gui(window):
     spacing(1, frame)
     cancel_button = tk.Button(master=frame, text="Cancel", bg='#73081a', fg='#fff', command=cancel_click, padx=20, pady=5) 
     cancel_button.pack()
+
+def logged_in_gui(window):
+    def logout_click():
+        frame.destroy()
+
+        login_gui(window)
+        messagebox.showerror('Logout', "Logged out Successfully")
+
+    frame = create_frame(window, "Logged In")
+
+    spacing(1, frame)
+
+    label = tk.Label(frame, text="Welcome", bg="#000", fg="#fff", font=('Silkscreen',20,'italic'))
+    label.pack()
+
+    spacing(2, frame)
+
+    cancel_button = tk.Button(master=frame, text="Logout", bg='#73081a', fg='#fff', command=logout_click, padx=20, pady=5) 
+    cancel_button.pack()
+
+
+
 
 open_gui()

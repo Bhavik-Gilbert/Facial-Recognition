@@ -8,6 +8,7 @@ import cv2
 
 def login(username):
     clear_images()
+    compare = False
 
     message = ""
 
@@ -26,19 +27,20 @@ def login(username):
 
         if(empty(select_image)):
             message = username + " does not exist in the system"
-            return message
+            return message, compare
 
         if(not take_picture()):
             message = "Error taking image"
-            return message
+            return message, compare
         
         detect = face_detection()
         if not(empty(detect)):
             clear_images()
-            return detect
+            return detect, compare
 
         
-        user_id = select_image[0][0]
+        user_id = select_image[0][1]
+
         image_data = convert_binary_data(constants.check_image_path)
 
         hit = 0
@@ -55,22 +57,23 @@ def login(username):
 
         clear_images()
         
-        if(hit/(hit+miss) > 0.7):
-            message = "same"
+        if(hit/(hit+miss) > 0.8):
+            if(len(select_image) < 20):
+                record = (user_id, image_data)
+                
+                query("""
+                    INSERT INTO
+                    faces (UserID, ImageData)
+                    VALUES (%s, %s);
+                    """,
+                    record)    
 
-            record = (user_id, image_data)
-            
-            query("""
-                INSERT INTO
-                faces (UserID, ImageData)
-                VALUES (%s, %s);
-                """,
-                record)    
+            compare = True
         else:
             message = "You are not " + username + "\nPlease check the details entered and try again"
         
 
-    return message
+    return message, compare
 
 def signup(username, firstname, surname, email, dob):
     message = ""

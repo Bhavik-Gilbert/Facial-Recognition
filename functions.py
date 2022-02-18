@@ -5,17 +5,7 @@ from facepplib import FacePP, exceptions
 import emoji
 
 #METHOD 2
-try:
-    from deepface import DeepFace
-    import cv2
-except:
-    pass
-
-#METHOD 3
-try:
-    import face_recognition
-except:
-    pass
+from deepface import DeepFace
 
 """ ------- tkinter window imports -------- """
 import re
@@ -91,19 +81,9 @@ def take_picture():
     result, image = cam.read()
     
     if result:
-    
-        # showing result, it take frame name and image 
-        # output
-        #imshow("GeeksForGeeks", image)
-    
         # saving image in local storage
         """--- have it add the image to a database in sql ---"""
         imwrite(constants.check_image_path, image)
-    
-        # If keyboard interrupt occurs, destroy image 
-        # window
-        #waitKey(0)
-        #destroyWindow("GeeksForGeeks")
 
         return True
     # If captured image is corrupted, moving to else part
@@ -141,59 +121,64 @@ def convert_image(data, filename):
     # Convert binary data to proper format and write it on Hard Disk
     with open(filename, 'wb') as file:
         file.write(data)
-   
+
+
+"""
+    Built with multiple methods, in order of ease to implement
+    The later the model, the more efficient / refactorable with growth is possible
+"""
+
 # define face comparing function
 def face_comparing(image1:str, image2:str):
     compare = False
-    #METHOD 1
+    
     while True:
+        #METHOD 1
         try:
             # api details
             api_key ='xQLsTmMyqp1L2MIt7M3l0h-cQiy0Dwhl'
             api_secret ='TyBSGw8NBEP9Tbhv_JbQM18mIlorY6-D'
             app = FacePP(api_key = api_key, api_secret = api_secret)
-        
+
+            #compares 2 images based on online url
             cmp_ = app.compare.get(image_url1 = image1,
                                 image_url2 = image2)
         
             # Comparing Photos
-            if cmp_.confidence > 70:
-                compare = True
+            compare = cmp_.confidence > 70
             break
         except:
             pass
-        
-        #METHOD 2
+    
         try:
-            confirmed_img = cv2.imread('path')
-            check_img = cv2.imread('path')
+            #METHOD 2
+            confirmed_img = cv2.imread(image1)
+            check_img = cv2.imread(image2)
 
-            results = DeepFace.verify(confirmed_img,check_img)
-            result = results["verified"]
-            if(result):
-                compare = True
+            # Comparing Photos
+            results = DeepFace.verify(confirmed_img,check_img, enforce_detection=False)
+            compare = results["verified"]
+
             break
         except:
             pass
-
-        #METHOD 3
+            
         try:
+            #METHOD 3
+            import face_recognition
+
             confirmed_img = face_recognition.load_image_file('path')
             confirmed_img_encoding = face_recognition.face_encodings(confirmed_img)[0]
 
             check_img = face_recognition.load_image_file('path')
             check_img_encoding = face_recognition.face_encodings(check_img)[0]
 
+            # Comparing Photos
             results = face_recognition.compare_faces([confirmed_img_encoding], check_img_encoding)
-
-            result = results[0]
-
-            if(result):
-                compare = True
+            compare = results[0]
             break
         except:
             pass
-
         break
 
     return compare
