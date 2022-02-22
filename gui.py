@@ -194,5 +194,5 @@ def logged_in_gui(window):
 
 
 
-
-open_gui()
+if __name__ == "__main__":
+    open_gui()
