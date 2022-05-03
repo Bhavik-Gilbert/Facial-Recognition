@@ -20,13 +20,13 @@ successfull login adding to the bank of facial images used to discern if the use
 >The application can be run on any device running python 3.7 or later with tkinter, tensorflow, deepface and mysql_connector installed alongside a database setup 
 >to hold the recoginition data base on the schema in the repo.
 ### Installation
->#### Install python 3.7 or above at [python installation](https://www.python.org/downloads/)
->#### Open your terminal and install the following modules using pip
->> pip install tensorflow -> [installation](https://pypi.org/project/tensorflow/)  
->> pip install deepface -> [installation](https://pypi.org/project/deepface/)  
->> pip install tk  -> [installation](https://www.tutorialspoint.com/how-to-install-tkinter-in-python)  
->> pip install mysql-connector  -> [installation](https://pypi.org/project/mysql-connector/)  
->> pip install tkcalendar -> [installation](https://pypi.org/project/tkcalendar/)  
+#### Install python 3.7 or above at [python installation](https://www.python.org/downloads/)
+#### Open your terminal and install the following modules using pip
+>pip install tensorflow -> [installation](https://pypi.org/project/tensorflow/)  
+>pip install deepface -> [installation](https://pypi.org/project/deepface/)  
+>pip install tk  -> [installation](https://www.tutorialspoint.com/how-to-install-tkinter-in-python)  
+>pip install mysql-connector  -> [installation](https://pypi.org/project/mysql-connector/)  
+>pip install tkcalendar -> [installation](https://pypi.org/project/tkcalendar/)  
   
   
 ## Usage
